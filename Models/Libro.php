@@ -8,6 +8,7 @@ class Libro {
     private $isbn;
     private $fecha_publicacion;
 
+    // Constructor de la clase
     public function __construct($titulo, $autor, $editorial, $isbn, $fecha_publicacion, $id = null) {
         $this->id = $id;
         $this->titulo = $titulo;
@@ -24,12 +25,12 @@ class Libro {
         return $stmt->fetchAll();
     }
 
-    // Método para buscar libros por título o autor
-    public static function buscar($pdo, $buscar) {
-        $sql = "SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?";
+    // Método para obtener un libro por ID
+    public static function obtenerPorId($pdo, $id) {
+        $sql = "SELECT * FROM libros WHERE id = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['%' . $buscar . '%', '%' . $buscar . '%']);
-        return $stmt->fetchAll();
+        $stmt->execute([$id]);
+        return $stmt->fetch();
     }
 
     // Método para agregar un libro
@@ -37,6 +38,21 @@ class Libro {
         $sql = "INSERT INTO libros (titulo, autor, editorial, isbn, fecha_publicacion) VALUES (?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([$this->titulo, $this->autor, $this->editorial, $this->isbn, $this->fecha_publicacion]);
+    }
+
+    // Método para eliminar un libro
+    public static function eliminar($pdo, $id) {
+        $sql = "DELETE FROM libros WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([$id]);
+    }
+
+    // Método para buscar libros por título o autor
+    public static function buscar($pdo, $buscar) {
+        $sql = "SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['%' . $buscar . '%', '%' . $buscar . '%']);
+        return $stmt->fetchAll();
     }
 
     // Getters y Setters
