@@ -43,6 +43,8 @@ class Usuario {
         $stmt = $pdo->query("SELECT * FROM usuarios");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Devuelve un array con todos los usuarios
     }
+
+    
 }
 
 
