@@ -26,8 +26,18 @@ switch ($action) {
     case 'layout':
         $controller->layoutAction();
         break;
+    case 'libros':
+        $controller->librosAction();  // Acción para libros
+        break;
+    case 'prestamos':
+        $controller->prestamosAction();  // Acción para préstamos
+        break;
+    case 'usuarios':
+        $controller->usuariosAction();  // Acción para usuarios (solo bibliotecarios)
+        break;
     default:
-        echo "Acción no encontrada";
+        echo "Acción no encontrada"; // Mensaje si la acción no es válida
         break;
 }
 ?>
+
