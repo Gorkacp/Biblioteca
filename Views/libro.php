@@ -1,5 +1,4 @@
 <?php
-// Verifica si el usuario tiene el rol de "bibliotecario"
 $isBibliotecario = isset($_SESSION['rol']) && $_SESSION['rol'] === 'bibliotecario';
 ?>
 
@@ -8,6 +7,7 @@ $isBibliotecario = isset($_SESSION['rol']) && $_SESSION['rol'] === 'bibliotecari
 <head>
     <meta charset="UTF-8">
     <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
     <h1>Bienvenido a la Biblioteca</h1>

@@ -18,7 +18,7 @@ class Database {
                 );
                 // Configurar el modo de errores
                 self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                echo "Conexión exitosa";  
+                echo "";  
             } catch (PDOException $e) {
                 // Si hay error
                 die("Error de conexión: " . $e->getMessage());

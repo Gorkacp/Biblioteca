@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar cuenta</title>
-    <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Ajusta la ruta del archivo CSS -->
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
     <div class="register-container">
