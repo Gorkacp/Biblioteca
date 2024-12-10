@@ -1,5 +1,5 @@
 <?php
-require_once 'models/Prestamo.php'; // Asegúrate de incluir el modelo de préstamo si lo necesitas
+require_once 'models/Prestamo.php'; 
 
 class PrestamoController {
     private $pdo;
@@ -10,7 +10,6 @@ class PrestamoController {
 
     // Acción para mostrar los préstamos
     public function prestamosAction() {
-        // Modificamos la consulta SQL para hacer un JOIN con las tablas necesarias
         $sql = "SELECT prestamos.*, usuarios.nombre_usuario, libros.titulo
                 FROM prestamos
                 JOIN usuarios ON prestamos.socio_id = usuarios.id
@@ -31,7 +30,7 @@ class PrestamoController {
             $usuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
         }
 
-        require 'views/prestamos.php'; // Asegúrate de tener la vista para mostrar los préstamos
+        require 'views/prestamos.php'; //Conexion con prestamos.php
     }
 
     // Acción para agregar un nuevo préstamo
@@ -100,7 +99,7 @@ class PrestamoController {
             
             // Verifica si los campos existen antes de proceder
             if (isset($_POST['socio_id'], $_POST['ejemplar_id'], $_POST['fecha_prestamo'], $_POST['fecha_devolucion'])) {
-                $id = $_POST['id'];  // ID del préstamo que se va a editar
+                $id = $_POST['id'];  // ID del prestamo que se va a editar
                 $socio_id = $_POST['socio_id'];
                 $ejemplar_id = $_POST['ejemplar_id'];
                 $fecha_prestamo = $_POST['fecha_prestamo'];

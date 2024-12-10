@@ -1,5 +1,4 @@
 <?php
-// controllers/LibroController.php
 require_once 'models/Libro.php';
 require_once 'config/DataBase.php';
 
@@ -13,7 +12,7 @@ class LibroController {
 
     public function indexAction() {
         $libros = Libro::obtenerTodos($this->pdo);  // Llamar al método con la conexión
-        include 'views/libro.php';  // Incluir la vista para mostrar los libros
+        include 'views/libro.php';  // Incluir la vista para mstrar los libros
     }
 
     public function agregarAction() {
@@ -34,7 +33,7 @@ class LibroController {
     }
 
     public function verAction() {
-        $id = $_GET['id'];  // Recuperar el parámetro 'id' de la URL
+        $id = $_GET['id']; 
         $libro = Libro::obtenerPorId($this->pdo, $id);  // Obtener el libro por su ID
         include 'views/verLibro.php';  // Mostrar la vista de detalle
     }

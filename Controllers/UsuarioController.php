@@ -1,5 +1,4 @@
 <?php 
-# Controlador para gestionar los usuarios.
 require_once 'config/DataBase.php';
 
 class UsuarioController {
@@ -28,7 +27,7 @@ class UsuarioController {
         // Cifrar la contraseña
         $contrasena_cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
-        // Insertar el nuevo usuario
+        // Insertar un nuevo usuario
         $sql = "INSERT INTO usuarios (dni, nombre_usuario, contrasena, nombre, apellido1, apellido2, direccion, email, telefono, rol) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);

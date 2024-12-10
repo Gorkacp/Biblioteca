@@ -1,7 +1,7 @@
 <?php 
 class Prestamo {
     public static function obtenerTodos($pdo) {
-        // Consulta SQL para obtener todos los préstamos, incluyendo los detalles del libro y el socio
+        // Obtenemos todos los préstamos, incluyendo los detalles del libro y el socio
         $sql = "
             SELECT 
                 prestamos.*, 

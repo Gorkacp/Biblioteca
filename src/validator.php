@@ -1,5 +1,5 @@
 <?php
-// Validador para los formularios
+// Validacion para los formularios
 
 class Validator {
 
@@ -11,11 +11,11 @@ class Validator {
 
     // Validar teléfono
     public static function validarTelefono($telefono) {
-        // Validación de formato de teléfono (solo números, longitud entre 9 y 15 caracteres)
+        // Validación de formato de teléfono (solo numeros, longitud entre 9 y 15 caracteres)
         return preg_match('/^\+?[0-9]{9,15}$/', $telefono);
     }
 
-    // Validar contraseña (mínimo 8 caracteres, al menos una letra y un número)
+    // Validar contraseña minimo 8 caracteres, al menos una letra y un número
     public static function validarContrasena($contrasena) {
         return preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/', $contrasena);
     }
@@ -25,7 +25,7 @@ class Validator {
         return !empty(trim($campo));
     }
 
-    // Validar número de DNI (en formato de 8 números y una letra)
+    // Validar número de DNI en formato de 8 números y una letra
     public static function validarDNI($dni) {
         // Expresión regular para validar el formato del DNI español (8 dígitos + letra)
         return preg_match('/^\d{8}[A-Za-z]$/', $dni);
@@ -41,7 +41,7 @@ class Validator {
         return filter_var($numero, FILTER_VALIDATE_INT) !== false;
     }
 
-    // Validar ISBN (debe tener 13 dígitos y ser numérico)
+    // Validar ISBN debe tener 13 dígitos y ser numérico
     public static function validarISBN($isbn) {
         return preg_match('/^\d{13}$/', $isbn);
     }

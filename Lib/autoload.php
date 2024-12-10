@@ -8,12 +8,10 @@ function autoload($class) {
     elseif (file_exists('Controllers/' . $class . '.php')) {
         include 'Controllers/' . $class . '.php';
     }
-    // Puedes agregar más condiciones para otras carpetas si es necesario
     else {
-        echo "Clase $class no encontrada.";
+        echo "Clase $class no encontrada."; // pOR si no encontramos la clase
     }
 }
-
 spl_autoload_register('autoload');
 ?>
 

@@ -1,9 +1,9 @@
 <?php
 class Database {
-    private static $host = 'localhost';  // Cambia según tu configuración
-    private static $dbname = 'biblioteca'; // Nombre de tu base de datos
-    private static $username = 'root'; // Tu usuario de base de datos
-    private static $password = ''; // Tu contraseña de base de datos
+    private static $host = 'localhost';  
+    private static $dbname = 'biblioteca'; // Nombre de la base de datos
+    private static $username = 'root'; // Usuario de base de datos
+    private static $password = ''; // Contraseña de base de datos
     private static $pdo;
 
     // Método estático para obtener la conexión PDO
@@ -18,9 +18,9 @@ class Database {
                 );
                 // Configurar el modo de errores
                 self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                echo "Conexión exitosa";  // Agrega esta línea para depuración
+                echo "Conexión exitosa";  
             } catch (PDOException $e) {
-                // En caso de error, mostrar el mensaje
+                // Si hay error
                 die("Error de conexión: " . $e->getMessage());
             }
         }

@@ -1,7 +1,6 @@
 <?php 
-// Incluir la clase Usuario (asegúrate de que la ruta sea correcta)
-require_once __DIR__ . '/../models/Usuario.php';  // Ajusta la ruta según tu estructura de carpetas
-require_once __DIR__ . '/../models/Prestamo.php'; // Ajusta la ruta si es necesario
+require_once __DIR__ . '/../models/Usuario.php';  
+require_once __DIR__ . '/../models/Prestamo.php'; 
 require_once __DIR__ . '/../models/Libro.php';
 
 class AuthController {
@@ -125,16 +124,15 @@ class AuthController {
         }
 
         // Obtener los préstamos desde la base de datos
-        // Aquí asumimos que tienes una clase Prestamo con el método obtenerTodos
-        $prestamos = Prestamo::obtenerTodos($this->pdo);  // Asegúrate de tener el modelo y el método
+        $prestamos = Prestamo::obtenerTodos($this->pdo);  
 
-        // Si no hay préstamos, puedes inicializar un array vacío
+        // Si no hay préstamos, puedes inicializar un array vacio
         if (!$prestamos) {
         $prestamos = [];
         }
 
         // Pasar la variable $prestamos a la vista
-        include __DIR__ . '/../views/prestamos.php';  // Asegúrate de que el archivo prestamos.php está en la carpeta correcta
+        include __DIR__ . '/../views/prestamos.php'; 
     }
 
         // Dentro del método usuariosAction del controlador AuthController

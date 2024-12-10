@@ -1,5 +1,5 @@
 <?php
-// Clase Libro: Representa los libros en la biblioteca
+// Clase Libro Representa los libros en la biblioteca
 class Libro {
     private $id;
     private $titulo;
