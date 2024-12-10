@@ -28,8 +28,8 @@ class Database {
         return self::$pdo; // Retorna la instancia de la conexión PDO
     }
 }
-
 ?>
+
 
 
 

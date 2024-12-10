@@ -20,6 +20,13 @@
             <label for="contrasena">Contraseña</label>
             <input type="password" name="contrasena" required>
 
+            <!-- Campo para seleccionar el rol -->
+            <label for="rol">Rol</label>
+            <select name="rol" required>
+                <option value="lector">Lector</option>
+                <option value="bibliotecario">Bibliotecario</option>
+            </select>
+
             <button type="submit">Registrar</button>
         </form>
 
@@ -27,4 +34,5 @@
     </div>
 </body>
 </html>
+
 
