@@ -1,43 +1,60 @@
-<?php 
-# Controlador para gestionar los préstamos.
-require_once 'config/DataBase.php';
+<?php
+require_once 'models/Prestamo.php'; // Asegúrate de incluir el modelo de préstamo si lo necesitas
 
 class PrestamoController {
-    public function prestarLibro($ejemplar_id, $socio_id) {
-        global $pdo;
-        $fecha_prestamo = date('Y-m-d');
-        $fecha_devolucion = date('Y-m-d', strtotime("+20 days"));
-        $sql = "INSERT INTO prestamos (ejemplar_id, socio_id, fecha_prestamo, fecha_devolucion) 
-                VALUES (?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$ejemplar_id, $socio_id, $fecha_prestamo, $fecha_devolucion]);
+    private $pdo;
+
+    public function __construct($pdo) {
+        $this->pdo = $pdo; // Guardamos la conexión PDO
     }
 
-    public function devolverLibro($prestamo_id) {
-        global $pdo;
-        $fecha_devolucion = date('Y-m-d');
-        $sql = "UPDATE prestamos SET estado = 'devuelto' WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$prestamo_id]);
+    // Acción para mostrar los préstamos
+    public function prestamosAction() {
+        // Modificamos la consulta SQL para hacer un JOIN con las tablas necesarias
+        $sql = "SELECT prestamos.*, usuarios.nombre_usuario, libros.titulo
+                FROM prestamos
+                JOIN usuarios ON prestamos.socio_id = usuarios.id
+                JOIN ejemplares ON prestamos.ejemplar_id = ejemplares.id
+                JOIN libros ON ejemplares.libro_id = libros.id";
+        
+        $stmt = $this->pdo->query($sql);
+        $prestamos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Registrar la devolución
-        $sql = "INSERT INTO devoluciones (prestamo_id, fecha_devolucion) VALUES (?, ?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$prestamo_id, $fecha_devolucion]);
+        require 'views/prestamos.php'; // Asegúrate de tener la vista para mostrar los préstamos
     }
 
-    public function mostrarPrestamosActivos() {
-        global $pdo;
-        $sql = "SELECT * FROM prestamos WHERE estado = 'activo'";
-        $stmt = $pdo->query($sql);
-        return $stmt->fetchAll();
-    }
+    // Acción para agregar un nuevo préstamo
+    public function addPrestamoAction() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $socio_id = $_POST['socio_id']; // Cambié usuario_id por socio_id según la base de datos
+            $ejemplar_id = $_POST['ejemplar_id']; // Cambié libro_id por ejemplar_id según la base de datos
+            $fecha_prestamo = $_POST['fecha_prestamo'];
+            $fecha_devolucion = $_POST['fecha_devolucion'];
 
-    public function mostrarPrestamosRetrasados() {
-        global $pdo;
-        $sql = "SELECT * FROM prestamos WHERE estado = 'retrasado'";
-        $stmt = $pdo->query($sql);
-        return $stmt->fetchAll();
+            if (empty($socio_id) || empty($ejemplar_id) || empty($fecha_prestamo) || empty($fecha_devolucion)) {
+                echo "Todos los campos son obligatorios.";
+                return;
+            }
+
+            // La consulta ahora insertará en la tabla prestamos usando socio_id y ejemplar_id
+            $sql = "INSERT INTO prestamos (ejemplar_id, socio_id, fecha_prestamo, fecha_devolucion) 
+                    VALUES (:ejemplar_id, :socio_id, :fecha_prestamo, :fecha_devolucion)";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':ejemplar_id', $ejemplar_id);
+            $stmt->bindParam(':socio_id', $socio_id);
+            $stmt->bindParam(':fecha_prestamo', $fecha_prestamo);
+            $stmt->bindParam(':fecha_devolucion', $fecha_devolucion);
+
+            if ($stmt->execute()) {
+                echo "Préstamo agregado con éxito.";
+                header('Location: index.php?action=prestamos');
+            } else {
+                echo "Error al agregar el préstamo.";
+            }
+        } else {
+            require 'views/addPrestamo.php'; // Vista para agregar un préstamo
+        }
     }
 }
 ?>

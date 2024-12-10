@@ -2,12 +2,14 @@
 // Asegúrate de incluir el archivo de configuración y las clases necesarias
 require_once 'config/DataBase.php'; // Ajusta la ruta según la ubicación de tu archivo
 require_once 'controllers/AuthController.php'; // Asegúrate de incluir el controlador
+require_once 'controllers/PréstamoController.php'; // Incluir el controlador de préstamos
 
 // Obtener la conexión PDO usando la clase Database
 $pdo = Database::getConnection();
 
-// Inicializar el controlador
-$controller = new AuthController($pdo);
+// Inicializar los controladores
+$authController = new AuthController($pdo);
+$prestamoController = new PrestamoController($pdo);  // Pasamos $pdo al constructor de PrestamoController
 
 // Verificar qué acción se solicita
 $action = isset($_GET['action']) ? $_GET['action'] : 'login'; // Si no se pasa acción, se asume 'login'
@@ -15,29 +17,31 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'login'; // Si no se pasa a
 // Ejecutar la acción correspondiente
 switch ($action) {
     case 'login':
-        $controller->loginAction();
+        $authController->loginAction();
         break;
     case 'registrar':
-        $controller->registrarAction();
+        $authController->registrarAction();
         break;
     case 'logout':
-        $controller->logoutAction();
+        $authController->logoutAction();
         break;
     case 'layout':
-        $controller->layoutAction();
+        $authController->layoutAction();
         break;
     case 'libros':
-        $controller->librosAction();  // Acción para libros
+        $authController->librosAction();  // Acción para libros
         break;
     case 'prestamos':
-        $controller->prestamosAction();  // Acción para préstamos
+        $prestamoController->prestamosAction();  // Acción para préstamos
+        break;
+    case 'addPrestamo':
+        $prestamoController->addPrestamoAction();  // Acción para agregar un préstamo
         break;
     case 'usuarios':
-        $controller->usuariosAction();  // Acción para usuarios (solo bibliotecarios)
+        $authController->usuariosAction();  // Acción para usuarios (solo bibliotecarios)
         break;
     default:
         echo "Acción no encontrada"; // Mensaje si la acción no es válida
         break;
 }
 ?>
-
