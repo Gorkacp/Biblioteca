@@ -1,16 +1,35 @@
-<?php 
-// Configuracion para conectar con la BD
-define("BD_HOST", "localhost");
-define("BD_NAME", "biblioteca");
-define("BD_USER", "root");
-define("BD_PASS", "");
+<?php
+class Database {
+    private static $host = 'localhost';  // Cambia según tu configuración
+    private static $dbname = 'biblioteca'; // Nombre de tu base de datos
+    private static $username = 'root'; // Tu usuario de base de datos
+    private static $password = ''; // Tu contraseña de base de datos
+    private static $pdo;
 
-// Configuramos PDO
-try {
-    $pdo = new PDO("mysql:host=" . BD_HOST . ";dbname=" . BD_NAME . ";charset=utf8", BD_USER, BD_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Excepcion
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); // Obtener datos
-} catch (PDOException $e) {
-    die("Error al conectar con la base de datos: " . $e->getMessage());
+    // Método estático para obtener la conexión PDO
+    public static function getConnection() {
+        if (self::$pdo === null) {
+            try {
+                // Crear la conexión PDO si aún no se ha creado
+                self::$pdo = new PDO(
+                    'mysql:host=' . self::$host . ';dbname=' . self::$dbname,
+                    self::$username,
+                    self::$password
+                );
+                // Configurar el modo de errores
+                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                echo "Conexión exitosa";  // Agrega esta línea para depuración
+            } catch (PDOException $e) {
+                // En caso de error, mostrar el mensaje
+                die("Error de conexión: " . $e->getMessage());
+            }
+        }
+
+        return self::$pdo; // Retorna la instancia de la conexión PDO
+    }
 }
+
 ?>
+
+
+

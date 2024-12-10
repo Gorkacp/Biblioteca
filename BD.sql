@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS biblioteca;
 USE biblioteca;
-
+DROP DATABASE IF  EXISTS biblioteca;
+-- Crear tabla de usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     dni VARCHAR(20) NOT NULL UNIQUE,
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Crear tabla de libros
 CREATE TABLE IF NOT EXISTS libros (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -26,6 +28,7 @@ CREATE TABLE IF NOT EXISTS libros (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Crear tabla de ejemplares
 CREATE TABLE IF NOT EXISTS ejemplares (
     id INT AUTO_INCREMENT PRIMARY KEY,
     libro_id INT NOT NULL,
@@ -35,6 +38,9 @@ CREATE TABLE IF NOT EXISTS ejemplares (
     FOREIGN KEY (libro_id) REFERENCES libros(id) ON DELETE CASCADE
 );
 
+-- Eliminar tabla de prestamos si existe
+
+-- Crear tabla de prestamos con ON DELETE CASCADE
 CREATE TABLE IF NOT EXISTS prestamos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ejemplar_id INT NOT NULL,
@@ -42,10 +48,11 @@ CREATE TABLE IF NOT EXISTS prestamos (
     fecha_prestamo DATE NOT NULL,
     fecha_devolucion DATE NOT NULL, -- Se calcula 20 días después de la fecha de préstamo
     estado ENUM('activo', 'devuelto', 'retrasado', 'penalizado') DEFAULT 'activo',
-    FOREIGN KEY (ejemplar_id) REFERENCES ejemplares(id),
+    FOREIGN KEY (ejemplar_id) REFERENCES ejemplares(id) ON DELETE CASCADE,  -- Añadir ON DELETE CASCADE
     FOREIGN KEY (socio_id) REFERENCES usuarios(id)
 );
 
+-- Crear tabla de socios
 CREATE TABLE IF NOT EXISTS socios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -55,28 +62,38 @@ CREATE TABLE IF NOT EXISTS socios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
+-- Crear tabla de devoluciones con ON DELETE CASCADE
 CREATE TABLE IF NOT EXISTS devoluciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     prestamo_id INT NOT NULL,
     fecha_devolucion DATE NOT NULL,
-    FOREIGN KEY (prestamo_id) REFERENCES prestamos(id)
+    FOREIGN KEY (prestamo_id) REFERENCES prestamos(id) ON DELETE CASCADE
 );
--- Insertar en usuarios
+
+
+-- Insertar un usuario
 INSERT INTO usuarios (dni, nombre_usuario, contrasena, nombre, apellido1, apellido2, direccion, email, telefono, rol)
 VALUES ('12345678A', 'jdoe', 'password_cifrada', 'Juan', 'Doe', 'Martinez', 'Calle Falsa 123', 'jdoe@mail.com', '123456789', 'lector');
--- Insertar en libros
+
+-- Insertar un libro
 INSERT INTO libros (titulo, autor, editorial, isbn, fecha_publicacion)
 VALUES ('El Quijote', 'Miguel de Cervantes', 'Editorial XYZ', '978-3-16-148410-0', '1605-01-01');
--- Insertar en ejemplares
+
+-- Insertar un ejemplar
 INSERT INTO ejemplares (libro_id, codigo, descripcion_estado)
 VALUES (1, 'EQ12345', 'disponible');
--- Insertar en Prestamos
+
+-- Insertar un préstamo
 INSERT INTO prestamos (ejemplar_id, socio_id, fecha_prestamo, fecha_devolucion)
 VALUES (1, 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY));
--- Insertar en Devoluciones
+
+-- Insertar una devolución
 INSERT INTO devoluciones (prestamo_id, fecha_devolucion)
 VALUES (1, CURDATE());
 
-
+-- Consultar los ejemplares disponibles
 SELECT * FROM ejemplares WHERE descripcion_estado = 'disponible';
+
+-- Consultar los préstamos activos
 SELECT * FROM prestamos WHERE estado = 'activo';
+SELECT * FROM libros;

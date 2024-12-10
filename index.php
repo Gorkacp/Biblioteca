@@ -1,42 +1,28 @@
 <?php
-// Incluir archivo de configuración para la base de datos
-require_once 'config/DataBase.php'; // Asegúrate de que la ruta sea correcta
+// index.php
+require_once 'controllers/AuthController.php';
+require_once 'config/database.php';
 
-// Incluir el controlador y otros archivos necesarios
-require_once 'controllers/LibroController.php';
-require_once 'models/Libro.php';
+$pdo = Database::getConnection();
+$authController = new AuthController($pdo);
 
-// Lógica para manejar las acciones
-$action = $_GET['action'] ?? 'index'; // Acción por defecto es 'index'
+// Obtener la acción desde la URL
+$action = $_GET['action'] ?? 'login'; // Acción por defecto
 
 switch ($action) {
-    case 'index':
-        $controller = new LibroController();
-        $controller->indexAction(); // Mostrar todos los libros
+    case 'login':
+        $authController->loginAction();
         break;
-
-    case 'agregar':
-        $controller = new LibroController();
-        $controller->agregarAction(); // Acción para agregar un nuevo libro
+    case 'registrar':
+        $authController->registrarAction();
         break;
-
-    case 'ver':
-        $controller = new LibroController();
-        $controller->verAction(); // Acción para ver los detalles de un libro
+    case 'logout':
+        $authController->logoutAction();
         break;
-
-    case 'editar':
-        $controller = new LibroController();
-        $controller->editarAction(); // Acción para editar un libro
-        break;
-
-    case 'eliminar':
-        $controller = new LibroController();
-        $controller->eliminarAction(); // Acción para eliminar un libro
-        break;
-
     default:
-        echo "Acción no encontrada.";
-        break;
+        $authController->loginAction(); // Acción por defecto si no se especifica
 }
 ?>
+
+
+

@@ -11,23 +11,28 @@ class Usuario {
         $this->id = $id;
         $this->dni = $dni;
         $this->nombre_usuario = $nombre_usuario;
-        $this->contrasena = password_hash($contrasena, PASSWORD_DEFAULT); // Cifra la contraseña
+        $this->contrasena = $contrasena;  // No ciframos aquí
         $this->rol = $rol;
     }
 
     // Método para registrar un nuevo usuario
     public function registrar($pdo) {
+        // Verificar si el nombre de usuario ya existe
+        if ($this->verificarUsuario($pdo, $this->nombre_usuario)) {
+            return false;  // El nombre de usuario ya existe
+        }
+
         $sql = "INSERT INTO usuarios (dni, nombre_usuario, contrasena, rol) VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([$this->dni, $this->nombre_usuario, $this->contrasena, $this->rol]);
     }
 
-    // Método para verificar la existencia de un usuario
+    // Método para verificar la existencia de un usuario por nombre de usuario
     public static function verificarUsuario($pdo, $nombre_usuario) {
         $sql = "SELECT * FROM usuarios WHERE nombre_usuario = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$nombre_usuario]);
-        return $stmt->fetch();
+        return $stmt->fetch();  // Devuelve el usuario si existe, null si no
     }
 
     // Método para autenticar al usuario
