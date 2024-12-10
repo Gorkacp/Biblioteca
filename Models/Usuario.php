@@ -1,4 +1,4 @@
-<?php
+<?php 
 class Usuario {
 
     private $dni;
@@ -36,4 +36,14 @@ class Usuario {
             'rol' => $this->rol
         ]);
     }
+
+    // Método para obtener todos los usuarios
+    public static function obtenerTodos($pdo) {
+        // Consulta para obtener todos los usuarios de la base de datos
+        $stmt = $pdo->query("SELECT * FROM usuarios");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Devuelve un array con todos los usuarios
+    }
 }
+
+
+?>

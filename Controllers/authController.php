@@ -137,18 +137,14 @@ class AuthController {
         include __DIR__ . '/../views/prestamos.php';  // Asegúrate de que el archivo prestamos.php está en la carpeta correcta
     }
 
-    // Acción para mostrar la vista de usuarios
+        // Dentro del método usuariosAction del controlador AuthController
     public function usuariosAction() {
-        if (!isset($_SESSION['usuario_id'])) {
-            header('Location: /Biblioteca/index.php?action=login');
-            exit;
-        }
-
-        // Lógica para obtener los usuarios desde la base de datos (esto lo puedes ajustar según tus necesidades)
-        // $usuarios = Usuario::obtenerTodos($this->pdo);
-
-        include __DIR__ . '/../views/usuarios.php';  // Asegúrate de tener el archivo usuarios.php
-    }
+        // Obtener la lista de usuarios desde el modelo
+        $usuarios = Usuario::obtenerTodos($this->pdo);  // Esto debe devolver un array de usuarios
+    
+        // Pasar la lista de usuarios a la vista
+        include 'views/usuario.php';  // Incluir la vista donde se mostrará la lista
+}
 }
 
 ?>

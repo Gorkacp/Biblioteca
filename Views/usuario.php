@@ -20,7 +20,6 @@
                 <td><?php echo htmlspecialchars($usuario['email']); ?></td>
                 <td><?php echo htmlspecialchars($usuario['rol']); ?></td>
                 <td>
-                    <a href="/usuarios/ver/<?php echo $usuario['id']; ?>">Ver</a>
                     <a href="/usuarios/editar/<?php echo $usuario['id']; ?>">Editar</a>
                     <a href="/usuarios/eliminar/<?php echo $usuario['id']; ?>">Eliminar</a>
                 </td>
@@ -28,5 +27,3 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
-<a href="/usuarios/nuevo">Añadir nuevo usuario</a>
