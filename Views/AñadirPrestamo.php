@@ -8,21 +8,22 @@
 </head>
 <body>
 <h2>Agregar Préstamo</h2>
-<form method="POST" action="index.php?action=addPrestamo">
-    <label for="usuario_id">ID Usuario:</label>
-    <input type="text" id="usuario_id" name="usuario_id">
-    <br>
-    <label for="libro_id">ID Libro:</label>
-    <input type="text" id="libro_id" name="libro_id">
-    <br>
+<form action="index.php?action=addPrestamo" method="POST">
+    <label for="socio_id">ID del Socio:</label>
+    <input type="text" id="socio_id" name="socio_id" required>
+
+    <label for="ejemplar_id">ID del Ejemplar:</label>
+    <input type="text" id="ejemplar_id" name="ejemplar_id" required>
+
     <label for="fecha_prestamo">Fecha de Préstamo:</label>
-    <input type="date" id="fecha_prestamo" name="fecha_prestamo">
-    <br>
+    <input type="date" id="fecha_prestamo" name="fecha_prestamo" required>
+
     <label for="fecha_devolucion">Fecha de Devolución:</label>
-    <input type="date" id="fecha_devolucion" name="fecha_devolucion">
-    <br>
+    <input type="date" id="fecha_devolucion" name="fecha_devolucion" required>
+
     <button type="submit">Agregar Préstamo</button>
 </form>
+
 
 </body>
 </html>

@@ -4,8 +4,13 @@ class LibroController {
     public function indexAction() {
         global $pdo; // Acceder a la conexión PDO global
 
-        // Llamamos al método obtenerTodos() pasando la conexión
-        $libros = Libro::obtenerTodos($pdo);
+        try {
+            // Llamamos al método obtenerTodos() pasando la conexión
+            $libros = Libro::obtenerTodos($pdo);
+        } catch (Exception $e) {
+            echo "Error al obtener los libros: " . $e->getMessage();
+            exit;
+        }
 
         // Incluir la vista para mostrar los libros
         include 'views/libro.php';
@@ -29,28 +34,49 @@ class LibroController {
 
             $titulo = $_POST['titulo'];
             $autor = $_POST['autor'];
-            $editorial = $_POST['editorial'];
+            $editorial = $_POST['editorial'] ?? null;
             $isbn = $_POST['isbn'];
-            $fecha_publicacion = $_POST['fecha_publicacion'];
+            $fecha_publicacion = $_POST['fecha_publicacion'] ?? null;
 
             // Crear una nueva instancia del libro
             $libro = new Libro($titulo, $autor, $editorial, $isbn, $fecha_publicacion);
-            if ($libro->agregarLibro($pdo)) { // Si la inserción es exitosa
-                header('Location: index.php'); // Redirigir después de agregar
-                exit;
-            } else {
-                echo "Error al agregar el libro.";
+
+            try {
+                if ($libro->agregarLibro($pdo)) { // Si la inserción es exitosa
+                    header('Location: index.php'); // Redirigir después de agregar
+                    exit;
+                } else {
+                    echo "Error al agregar el libro.";
+                }
+            } catch (Exception $e) {
+                echo "Error al agregar el libro: " . $e->getMessage();
             }
         }
-        
+
         // Mostrar el formulario de agregar libro
         include 'views/agregarLibro.php';
     }
 
     public function verAction() {
         global $pdo; // Acceder a la conexión PDO global
-        $id = $_GET['id'];
-        $libro = Libro::obtenerPorId($pdo, $id);
+
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            echo "ID del libro no especificado.";
+            exit;
+        }
+
+        try {
+            $libro = Libro::obtenerPorId($pdo, $id);
+            if (!$libro) {
+                echo "El libro no existe.";
+                exit;
+            }
+        } catch (Exception $e) {
+            echo "Error al obtener el libro: " . $e->getMessage();
+            exit;
+        }
+
         include 'views/verLibro.php'; // Ver detalles del libro
     }
 
@@ -63,9 +89,23 @@ class LibroController {
             exit;
         }
 
-        $id = $_GET['id'];
-        $libro = Libro::obtenerPorId($pdo, $id);
-        
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            echo "ID del libro no especificado.";
+            exit;
+        }
+
+        try {
+            $libro = Libro::obtenerPorId($pdo, $id);
+            if (!$libro) {
+                echo "El libro no existe.";
+                exit;
+            }
+        } catch (Exception $e) {
+            echo "Error al obtener el libro: " . $e->getMessage();
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Validación de datos
             if (empty($_POST['titulo']) || empty($_POST['autor']) || empty($_POST['isbn'])) {
@@ -76,24 +116,28 @@ class LibroController {
             // Procesar formulario de edición
             $titulo = $_POST['titulo'];
             $autor = $_POST['autor'];
-            $editorial = $_POST['editorial'];
+            $editorial = $_POST['editorial'] ?? null;
             $isbn = $_POST['isbn'];
-            $fecha_publicacion = $_POST['fecha_publicacion'];
-            
+            $fecha_publicacion = $_POST['fecha_publicacion'] ?? null;
+
             $libro->setTitulo($titulo);
             $libro->setAutor($autor);
             $libro->setEditorial($editorial);
             $libro->setIsbn($isbn);
             $libro->setFechaPublicacion($fecha_publicacion);
 
-            if ($libro->actualizar($pdo)) {
-                header('Location: index.php');
-                exit;
-            } else {
-                echo "Error al actualizar el libro.";
+            try {
+                if ($libro->actualizar($pdo)) {
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    echo "Error al actualizar el libro.";
+                }
+            } catch (Exception $e) {
+                echo "Error al actualizar el libro: " . $e->getMessage();
             }
         }
-        
+
         // Mostrar formulario de edición
         include 'views/editarLibro.php';
     }
@@ -107,14 +151,22 @@ class LibroController {
             exit;
         }
 
-        $id = $_GET['id'];
-        if (Libro::eliminar($pdo, $id)) { // Verificar si la eliminación fue exitosa
-            header('Location: index.php');
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            echo "ID del libro no especificado.";
             exit;
-        } else {
-            echo "Error al eliminar el libro.";
+        }
+
+        try {
+            if (Libro::eliminar($pdo, $id)) { // Verificar si la eliminación fue exitosa
+                header('Location: index.php');
+                exit;
+            } else {
+                echo "Error al eliminar el libro.";
+            }
+        } catch (Exception $e) {
+            echo "Error al eliminar el libro: " . $e->getMessage();
         }
     }
 }
-
 ?>

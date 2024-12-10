@@ -1,28 +1,60 @@
-<table>
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Editorial</th>
-            <th>ISBN</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($libros as $libro): ?>
-            <tr>
-                <td><?php echo $libro['titulo']; ?></td>
-                <td><?php echo $libro['autor']; ?></td>
-                <td><?php echo $libro['editorial']; ?></td>
-                <td><?php echo $libro['isbn']; ?></td>
-                <td>
-                    <a href="index.php?action=ver&id=<?php echo $libro['id']; ?>">Ver</a>
-                    <a href="index.php?action=editar&id=<?php echo $libro['id']; ?>">Editar</a>
-                    <a href="index.php?action=eliminar&id=<?php echo $libro['id']; ?>">Eliminar</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+<?php
+// Verifica si el usuario tiene el rol de "bibliotecario"
+$isBibliotecario = isset($_SESSION['rol']) && $_SESSION['rol'] === 'bibliotecario';
+?>
 
-<a href="index.php?action=agregar">Añadir nuevo libro</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca</title>
+</head>
+<body>
+    <h1>Bienvenido a la Biblioteca</h1>
+
+    <!-- Mostrar el enlace para añadir libro, solo si es bibliotecario -->
+    <?php if ($isBibliotecario): ?>
+        <p><a href="index.php?action=addLibro" class="btn">Añadir Libro</a></p>
+    <?php endif; ?>
+
+    <!-- Mostrar los libros -->
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+                <th>ISBN</th>
+                <th>Fecha Publicación</th>
+                <?php if ($isBibliotecario): ?>
+                    <th>Acciones</th> <!-- Solo si es bibliotecario -->
+                <?php endif; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Aquí deberías obtener los libros desde la base de datos
+            // Por ejemplo, si tienes un array $libros
+            foreach ($libros as $libro) {
+                echo "<tr>
+                        <td>{$libro['titulo']}</td>
+                        <td>{$libro['autor']}</td>
+                        <td>{$libro['editorial']}</td>
+                        <td>{$libro['isbn']}</td>
+                        <td>{$libro['fecha_publicacion']}</td>";
+                
+                if ($isBibliotecario) {
+                    // Solo si es bibliotecario, mostrar las acciones de editar y eliminar
+                    echo "<td>
+                            <a href='index.php?action=editLibro&id={$libro['id']}' class='btn'>Editar</a>
+                            <a href='index.php?action=deleteLibro&id={$libro['id']}' class='btn'>Eliminar</a>
+                          </td>";
+                }
+
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</body>
+</html>

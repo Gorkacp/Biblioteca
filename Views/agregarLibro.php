@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Libro</title>
+</head>
+<body>
 <h2>Añadir nuevo libro</h2>
 <form method="POST" action="index.php?action=agregar">
     <label for="titulo">Título:</label>
@@ -12,3 +20,6 @@
     <input type="date" id="fecha_publicacion" name="fecha_publicacion" required>
     <button type="submit">Añadir libro</button>
 </form>
+    
+</body>
+</html>

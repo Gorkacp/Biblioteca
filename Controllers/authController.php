@@ -2,6 +2,7 @@
 // Incluir la clase Usuario (asegúrate de que la ruta sea correcta)
 require_once __DIR__ . '/../models/Usuario.php';  // Ajusta la ruta según tu estructura de carpetas
 require_once __DIR__ . '/../models/Prestamo.php'; // Ajusta la ruta si es necesario
+require_once __DIR__ . '/../models/Libro.php';
 
 class AuthController {
 
@@ -105,17 +106,15 @@ class AuthController {
         include __DIR__ . '/../views/layout.php';
     }
 
-    // Acción para mostrar la vista de libros
     public function librosAction() {
-        if (!isset($_SESSION['usuario_id'])) {
-            header('Location: /Biblioteca/index.php?action=login');
-            exit;
-        }
-
-        // Lógica para obtener los libros desde la base de datos (esto lo puedes ajustar según tus necesidades)
-        // $libros = Libro::obtenerTodos($this->pdo);
-
-        include __DIR__ . '/../views/libros.php';  // Asegúrate de tener el archivo libros.php
+        // Obtener la conexión a la base de datos
+        $pdo = Database::getConnection();
+    
+        // Obtener todos los libros
+        $libros = Libro::obtenerTodos($pdo);
+    
+        // Incluir la vista donde se mostrarán los libros
+        include 'views/libro.php'; // Asegúrate de que la ruta sea correcta
     }
 
     // Acción para mostrar la vista de préstamos

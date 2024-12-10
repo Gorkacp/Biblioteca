@@ -18,41 +18,62 @@ class Libro {
         $this->fecha_publicacion = $fecha_publicacion;
     }
 
-    // Método para obtener todos los libros
     public static function obtenerTodos($pdo) {
-        $sql = "SELECT * FROM libros";
-        $stmt = $pdo->query($sql);
-        return $stmt->fetchAll();
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM libros");
+            $stmt->execute();
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $resultados;
+        } catch (PDOException $e) {
+            throw new Exception("Error al obtener todos los libros: " . $e->getMessage());
+        }
     }
 
-    // Método para obtener un libro por ID
+    // Obtener un libro por su ID
     public static function obtenerPorId($pdo, $id) {
-        $sql = "SELECT * FROM libros WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetch();
+        try {
+            $sql = "SELECT * FROM libros WHERE id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error al obtener el libro: " . $e->getMessage(), $e->getCode());
+        }
     }
 
-    // Método para agregar un libro
+    // Agregar un libro a la base de datos
     public function agregarLibro($pdo) {
-        $sql = "INSERT INTO libros (titulo, autor, editorial, isbn, fecha_publicacion) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$this->titulo, $this->autor, $this->editorial, $this->isbn, $this->fecha_publicacion]);
+        try {
+            $sql = "INSERT INTO libros (titulo, autor, editorial, isbn, fecha_publicacion) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([$this->titulo, $this->autor, $this->editorial, $this->isbn, $this->fecha_publicacion]);
+        } catch (PDOException $e) {
+            throw new Exception("Error al agregar el libro: " . $e->getMessage(), $e->getCode());
+        }
     }
 
-    // Método para eliminar un libro
+    // Eliminar un libro por su ID
     public static function eliminar($pdo, $id) {
-        $sql = "DELETE FROM libros WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$id]);
+        try {
+            $sql = "DELETE FROM libros WHERE id = ?";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([$id]);
+        } catch (PDOException $e) {
+            throw new Exception("Error al eliminar el libro: " . $e->getMessage(), $e->getCode());
+        }
     }
 
-    // Método para buscar libros por título o autor
+    // Buscar libros por título o autor
     public static function buscar($pdo, $buscar) {
-        $sql = "SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['%' . $buscar . '%', '%' . $buscar . '%']);
-        return $stmt->fetchAll();
+        try {
+            $sql = "SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['%' . $buscar . '%', '%' . $buscar . '%']);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error al buscar libros: " . $e->getMessage(), $e->getCode());
+        }
     }
 
     // Getters y Setters
