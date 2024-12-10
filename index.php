@@ -1,9 +1,9 @@
 <?php
-// Asegúrate de incluir el archivo de configuración y las clases necesarias
-require_once 'config/DataBase.php'; // Ajusta la ruta según la ubicación de tu archivo
-require_once 'controllers/AuthController.php'; // Asegúrate de incluir el controlador
-require_once 'controllers/LibroController.php'; // Incluir el controlador de libros
-require_once 'controllers/PréstamoController.php'; // Incluir el controlador de préstamos
+// Las rutas necesarias
+require_once 'config/DataBase.php'; 
+require_once 'controllers/AuthController.php'; 
+require_once 'controllers/LibroController.php'; 
+require_once 'controllers/PréstamoController.php'; 
 
 // Obtener la conexión PDO usando la clase Database
 $pdo = Database::getConnection();
@@ -19,52 +19,52 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'login'; // Si no se pasa a
 // Ejecutar la acción correspondiente
 switch ($action) {
     case 'login':
-        $authController->loginAction();
+        $authController->loginAction();// Acción para listar logueo
         break;
     case 'registrar':
-        $authController->registrarAction();
+        $authController->registrarAction(); // Acción para listar registro.php
         break;
     case 'logout':
-        $authController->logoutAction();
+        $authController->logoutAction();// Acción para logins
         break;
     case 'layout':
-        $authController->layoutAction();
+        $authController->layoutAction();// Acción para layout
         break;
     case 'libros':
-        $libroController->indexAction();  // Acción para listar libros
+        $libroController->indexAction(); // Acción para listar libros
         break;
     case 'agregar':
-        $libroController->agregarAction();  // Acción para agregar un libro
+        $libroController->agregarAction(); // Acción para agregar un libro
         break;
     case 'addLibro':
-        $libroController->agregarAction();  // Acción para agregar un libro
+        $libroController->agregarAction(); // Acción para agregar un libro
         break;
     case 'editLibro':
-        $libroController->editarAction();  // Acción para editar un libro
+        $libroController->editarAction();// Acción para editar un libro
         break;
     case 'editar':
-        $libroController->editarAction();  // Acción para editar un libro
+        $libroController->editarAction();// Acción para editar un libro
         break;
     case 'deleteLibro':
-        $libroController->eliminarAction();  // Acción para eliminar un libro
+        $libroController->eliminarAction(); // Acción para eliminar un libro
         break;
     case 'prestamos':
-        $prestamoController->prestamosAction();  // Acción para préstamos
+        $prestamoController->prestamosAction();// Acción para préstamos
         break;
     case 'addPrestamo':
-        $prestamoController->addPrestamoAction();  // Acción para agregar un préstamo
+        $prestamoController->addPrestamoAction();// Acción para agregar un préstamo
         break;
     case 'editPrestamo':
-        $prestamoController->editPrestamoAction();  // Acción para editar un préstamo
+        $prestamoController->editPrestamoAction();// Acción para editar un préstamo
         break;
     case 'deletePrestamo':
-        $prestamoController->deletePrestamoAction();  // Acción para eliminar un préstamo
+        $prestamoController->deletePrestamoAction();// Acción para eliminar un préstamo
         break;
     case 'usuarios':
-        $authController->usuariosAction();  // Acción para usuarios (solo bibliotecarios)
+        $authController->usuariosAction();// Acción para usuarios (solo bibliotecarios)
         break;
     default:
-        echo "Acción no encontrada"; // Mensaje si la acción no es válida
+        echo "Acción no encontrada";// Mensaje si la acción no es válida
         break;
 }
 ?>
