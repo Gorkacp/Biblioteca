@@ -42,6 +42,9 @@ switch ($action) {
     case 'editLibro':
         $libroController->editarAction();  // Acción para editar un libro
         break;
+    case 'editar':
+        $libroController->editarAction();  // Acción para editar un libro
+        break;
     case 'deleteLibro':
         $libroController->eliminarAction();  // Acción para eliminar un libro
         break;

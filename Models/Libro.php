@@ -23,7 +23,7 @@ class Libro {
             $stmt = $pdo->prepare("SELECT * FROM libros");
             $stmt->execute();
             $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+        
             return $resultados;
         } catch (PDOException $e) {
             throw new Exception("Error al obtener todos los libros: " . $e->getMessage());
@@ -36,11 +36,18 @@ class Libro {
             $sql = "SELECT * FROM libros WHERE id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($resultado) {
+                // Crear un objeto Libro con los datos obtenidos
+                return new Libro($resultado['titulo'], $resultado['autor'], $resultado['editorial'], $resultado['isbn'], $resultado['fecha_publicacion'], $resultado['id']);
+            }
+            return null;
         } catch (PDOException $e) {
             throw new Exception("Error al obtener el libro: " . $e->getMessage(), $e->getCode());
         }
     }
+    
 
     // Agregar un libro a la base de datos
     public function agregarLibro($pdo) {
@@ -76,7 +83,21 @@ class Libro {
         }
     }
 
-    // Getters y Setters
+    public function actualizar($pdo) {
+        $sql = "UPDATE libros SET titulo = :titulo, autor = :autor, editorial = :editorial, isbn = :isbn, fecha_publicacion = :fecha_publicacion WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+    
+        $stmt->bindParam(':titulo', $this->titulo);
+        $stmt->bindParam(':autor', $this->autor);
+        $stmt->bindParam(':editorial', $this->editorial);
+        $stmt->bindParam(':isbn', $this->isbn);
+        $stmt->bindParam(':fecha_publicacion', $this->fecha_publicacion);
+        $stmt->bindParam(':id', $this->id);
+    
+        return $stmt->execute();  // Devuelve true si la actualización fue exitosa
+    }
+
+    // Getters
     public function getId() {
         return $this->id;
     }
@@ -99,6 +120,27 @@ class Libro {
 
     public function getFechaPublicacion() {
         return $this->fecha_publicacion;
+    }
+
+    // Setters
+    public function setTitulo($titulo) {
+        $this->titulo = $titulo;
+    }
+
+    public function setAutor($autor) {
+        $this->autor = $autor;
+    }
+
+    public function setEditorial($editorial) {
+        $this->editorial = $editorial;
+    }
+
+    public function setIsbn($isbn) {
+        $this->isbn = $isbn;
+    }
+
+    public function setFechaPublicacion($fecha_publicacion) {
+        $this->fecha_publicacion = $fecha_publicacion;
     }
 }
 ?>
