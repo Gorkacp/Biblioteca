@@ -10,7 +10,7 @@
     <h2>Lista de Préstamos</h2>
     
     <!-- Botón para agregar un nuevo préstamo -->
-    <a href="index.php?action=addPrestamo" class="btn">Agregar Préstamo</a>
+    <a href="index.php?action=addPrestamo" class="btn">Pedir Préstamo</a>
     
     <table>
         <thead>

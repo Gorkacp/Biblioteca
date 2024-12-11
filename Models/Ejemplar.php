@@ -1,11 +1,11 @@
 <?php
-// Clase Ejemplar: Representa los ejemplares de los libros en la biblioteca
 class Ejemplar {
     private $id;
     private $libro_id;
     private $codigo;
     private $descripcion_estado;
 
+    // Constructor
     public function __construct($libro_id, $codigo, $descripcion_estado, $id = null) {
         $this->id = $id;
         $this->libro_id = $libro_id;
@@ -13,50 +13,39 @@ class Ejemplar {
         $this->descripcion_estado = $descripcion_estado;
     }
 
-    // Método para obtener todos los ejemplares disponibles
-    public static function obtenerEjemplaresDisponibles($pdo) {
-        $sql = "SELECT * FROM ejemplares WHERE descripcion_estado = 'disponible'";
+    // Método para obtener ejemplares según el rol (lector o bibliotecario)
+    public static function obtenerEjemplaresPorRol($pdo, $rol) {
+        if ($rol == 'lector') {
+            // Obtener ejemplares disponibles para los lectores (sin préstamos activos)
+            $sql = "SELECT e.*, l.titulo
+                    FROM ejemplares e
+                    JOIN libros l ON e.libro_id = l.id
+                    WHERE e.descripcion_estado = 'disponible'
+                    AND NOT EXISTS (
+                        SELECT 1 FROM prestamos p WHERE p.ejemplar_id = e.id AND p.estado = 'activo'
+                    )";
+        } elseif ($rol == 'bibliotecario') {
+            // Obtener todos los ejemplares para los bibliotecarios (incluyendo prestados, reservados, dañados)
+            $sql = "SELECT e.*, l.titulo
+                    FROM ejemplares e
+                    JOIN libros l ON e.libro_id = l.id
+                    WHERE e.descripcion_estado IN ('disponible', 'prestado', 'reservado', 'dañado')";
+        } else {
+            return []; // Si el rol no es válido, devolver un array vacío.
+        }
+
+        // Ejecutar la consulta y devolver los resultados
         $stmt = $pdo->query($sql);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Asegúrate de que obtienes los resultados como un array
     }
 
-    // Método para agregar un ejemplar
-    public function agregarEjemplar($pdo) {
-        $sql = "INSERT INTO ejemplares (libro_id, codigo, descripcion_estado) VALUES (?, ?, ?)";
+    // Método para obtener un ejemplar por su ID
+    public static function obtenerPorId($pdo, $id) {
+        $sql = "SELECT * FROM ejemplares WHERE id = ?";
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$this->libro_id, $this->codigo, $this->descripcion_estado]);
-    }
-
-    // Método para actualizar el estado de un ejemplar
-    public function actualizarEstado($pdo, $estado) {
-        $sql = "UPDATE ejemplares SET descripcion_estado = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$estado, $this->id]);
-    }
-
-    // Método para obtener un ejemplar por su código
-    public static function obtenerPorCodigo($pdo, $codigo) {
-        $sql = "SELECT * FROM ejemplares WHERE codigo = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$codigo]);
-        return $stmt->fetch();
-    }
-
-    // Getters y Setters
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getLibroId() {
-        return $this->libro_id;
-    }
-
-    public function getCodigo() {
-        return $this->codigo;
-    }
-
-    public function getDescripcionEstado() {
-        return $this->descripcion_estado;
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Asegúrate de obtener un array
     }
 }
 ?>
+

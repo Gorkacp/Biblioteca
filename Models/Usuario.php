@@ -27,14 +27,27 @@ class Usuario {
     }
 
     public function registrar($pdo) {
+        // Verificar si el nombre de usuario ya está registrado
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE nombre_usuario = :nombre_usuario");
+        $stmt->execute(['nombre_usuario' => $this->nombre_usuario]);
+
+        if ($stmt->rowCount() > 0) {
+            return false; // El nombre de usuario ya está registrado
+        }
+
         // Consulta para registrar un nuevo usuario en la base de datos
         $stmt = $pdo->prepare("INSERT INTO usuarios (dni, nombre_usuario, contrasena, rol) VALUES (:dni, :nombre_usuario, :contrasena, :rol)");
-        return $stmt->execute([
+        if ($stmt->execute([
             'dni' => $this->dni,
             'nombre_usuario' => $this->nombre_usuario,
             'contrasena' => $this->contrasena,
             'rol' => $this->rol
-        ]);
+        ])) {
+            return true; // Registro exitoso
+        } else {
+            // Devolver falso si hubo un error al registrar
+            return false;
+        }
     }
 
     // Método para obtener todos los usuarios
@@ -43,9 +56,8 @@ class Usuario {
         $stmt = $pdo->query("SELECT * FROM usuarios");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Devuelve un array con todos los usuarios
     }
-
-    
 }
+
 
 
 ?>

@@ -1,7 +1,8 @@
-<?php 
+<?php
 require_once __DIR__ . '/../models/Usuario.php';  
 require_once __DIR__ . '/../models/Prestamo.php'; 
 require_once __DIR__ . '/../models/Libro.php';
+require_once __DIR__ . '/../src/validator.php';
 
 class AuthController {
 
@@ -60,11 +61,37 @@ class AuthController {
             $dni = $_POST['dni'];
             $rol = $_POST['rol'];
 
+            // Validaciones de los campos
             if (empty($nombre_usuario) || empty($contrasena) || empty($dni) || empty($rol)) {
                 echo "Por favor, complete todos los campos.";
                 return;
             }
 
+            // Validar nombre de usuario
+            if (!Validator::validarNombreUsuario($nombre_usuario)) {
+                echo "El nombre de usuario debe tener al menos 4 caracteres y solo debe contener letras y números.";
+                return;
+            }
+
+            // Validar contraseña
+            if (!Validator::validarContrasena($contrasena)) {
+                echo "La contraseña debe tener al menos 8 caracteres, y contener al menos una letra y un número.";
+                return;
+            }
+
+            // Validar DNI
+            if (!Validator::validarDNI($dni)) {
+                echo "El DNI debe tener el formato correcto (8 dígitos + letra).";
+                return;
+            }
+
+            // Validar rol
+            if (!in_array($rol, ['lector', 'bibliotecario'])) {
+                echo "El rol debe ser 'lector' o 'bibliotecario'.";
+                return;
+            }
+
+            // Encriptar la contraseña
             $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
             $usuario = new Usuario($dni, $nombre_usuario, $contrasena_hash, $rol);
@@ -135,14 +162,13 @@ class AuthController {
         include __DIR__ . '/../views/prestamos.php'; 
     }
 
-        // Dentro del método usuariosAction del controlador AuthController
+    // Dentro del método usuariosAction del controlador AuthController
     public function usuariosAction() {
         // Obtener la lista de usuarios desde el modelo
         $usuarios = Usuario::obtenerTodos($this->pdo);  // Esto debe devolver un array de usuarios
     
         // Pasar la lista de usuarios a la vista
-        include 'views/usuario.php';  // Incluir la vista donde se mostrará la lista
+        include 'views/usuario.php';  
+    }
 }
-}
-
 ?>

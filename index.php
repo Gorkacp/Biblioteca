@@ -4,6 +4,9 @@ require_once 'config/DataBase.php';
 require_once 'controllers/AuthController.php'; 
 require_once 'controllers/LibroController.php'; 
 require_once 'controllers/PréstamoController.php'; 
+require_once 'controllers/EjemplarController.php';
+require_once 'src/validator.php';
+
 
 // Obtener la conexión PDO usando la clase Database
 $pdo = Database::getConnection();
@@ -12,7 +15,7 @@ $pdo = Database::getConnection();
 $authController = new AuthController($pdo);
 $libroController = new LibroController();  // Crear una instancia de LibroController
 $prestamoController = new PrestamoController($pdo);  // Pasamos $pdo al constructor de PrestamoController
-
+$ejemplarController = new EjemplarController();  // Crear una instancia de EjemplarController
 // Verificar qué acción se solicita
 $action = isset($_GET['action']) ? $_GET['action'] : 'login'; // Si no se pasa acción, se asume 'login'
 
@@ -60,6 +63,9 @@ switch ($action) {
     case 'deletePrestamo':
         $prestamoController->deletePrestamoAction();// Acción para eliminar un préstamo
         break;
+    case 'ejemplares':
+        $ejemplarController->listarEjemplares($pdo, 'bibliotecario'); // Acción para listar ejemplares (puedes ajustar el rol si es necesario)
+        break;
     case 'usuarios':
         $authController->usuariosAction();// Acción para usuarios (solo bibliotecarios)
         break;
@@ -67,4 +73,6 @@ switch ($action) {
         echo "Acción no encontrada";// Mensaje si la acción no es válida
         break;
 }
+
+
 ?>

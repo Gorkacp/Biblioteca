@@ -1,6 +1,6 @@
 <?php
 require_once 'models/Prestamo.php'; 
-
+require_once 'config/DataBase.php';
 class PrestamoController {
     private $pdo;
 
