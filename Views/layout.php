@@ -23,12 +23,12 @@
     <!-- Contenido principal -->
     <div class="contenido">
         <h1>Bienvenido <?php echo $_SESSION['rol'] == 'bibliotecario' ? 'bibliotecario' : 'lector'; ?></h1>
-        <p>Bienvenido al sistema de biblioteca</p>
+        <p>Bienvenido al sistema de biblioteca, aqui podras ver tus libros, los libros que hay disponible y la fechas de os prestamos</p>
     </div>
 
     <!-- Pie de página -->
     <footer>
-        <p>&copy; 2024 Biblioteca - Todos los derechos reservados.</p>
+        <p>&copy; 2024 Biblioteca - Todos los derechos reservados a Gorka.</p>
     </footer>
 
 </body>

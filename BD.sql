@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS ejemplares (
     FOREIGN KEY (libro_id) REFERENCES libros(id) ON DELETE CASCADE
 );
 
--- Eliminar tabla de prestamos si existe
 
 -- Crear tabla de prestamos con ON DELETE CASCADE
 CREATE TABLE IF NOT EXISTS prestamos (

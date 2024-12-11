@@ -31,21 +31,24 @@ class Ejemplar {
                     JOIN libros l ON e.libro_id = l.id
                     WHERE e.descripcion_estado IN ('disponible', 'prestado', 'reservado', 'dañado')";
         } else {
-            return []; // Si el rol no es válido, devolver un array vacío.
+            // Si el rol no es válido, devolver un array vacío.
+            return [];
         }
 
-        // Ejecutar la consulta y devolver los resultados
-        $stmt = $pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Asegúrate de que obtienes los resultados como un array
+        // Preparar y ejecutar la consulta con parámetros
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();  // Ejecutar la consulta
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Retornar todos los resultados como un array asociativo
     }
 
     // Método para obtener un ejemplar por su ID
     public static function obtenerPorId($pdo, $id) {
         $sql = "SELECT * FROM ejemplares WHERE id = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);  // Asegúrate de obtener un array
+        $stmt->execute([$id]);  // Asegúrate de pasar el ID como parámetro
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Asegúrate de que obtienes un solo resultado
     }
 }
+
 ?>
 

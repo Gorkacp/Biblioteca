@@ -149,8 +149,6 @@ class PrestamoController {
         }
     }
     
-    
-
     public function deletePrestamoAction() {
         $id = $_GET['id']; // Obtener el ID del préstamo que se va a eliminar
     

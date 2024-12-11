@@ -11,11 +11,11 @@ class Validator {
 
     // Validar teléfono
     public static function validarTelefono($telefono) {
-        // Validación de formato de teléfono (solo números, longitud entre 9 y 15 caracteres)
+        // Validación de formato de teléfono solo números, longitud entre 9 y 15 caracteres
         return preg_match('/^\+?[0-9]{9,15}$/', $telefono);
     }
 
-    // Validar contraseña (mínimo 8 caracteres, al menos una letra y un número)
+    // Validar contraseña mínimo 8 caracteres, al menos una letra y un número
     public static function validarContrasena($contrasena) {
         // Contraseña debe tener al menos una letra, un número y longitud mínima de 8 caracteres
         return preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/', $contrasena);

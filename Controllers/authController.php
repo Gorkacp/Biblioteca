@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/Usuario.php';  
 require_once __DIR__ . '/../models/Prestamo.php'; 
 require_once __DIR__ . '/../models/Libro.php';
+require_once __DIR__ . '/../models/Ejemplar.php';
 require_once __DIR__ . '/../src/validator.php';
 
 class AuthController {

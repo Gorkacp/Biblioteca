@@ -1,27 +1,47 @@
 <?php
-require_once 'models/Ejemplar.php'; // Asegúrate de que la clase Ejemplar esté incluida
-require_once 'config/DataBase.php';
+require_once 'models/Ejemplar.php'; 
+require_once 'config/Database.php';
 
 class EjemplarController {
+    // Método en EjemplarController para listar los ejemplares según el rol
+    public function listarEjemplares($rol) {
+        try {
+            // Obtener la conexión PDO desde la clase Database
+            $pdo = Database::getConnection(); // Cambiar de $this->pdo a Database::getConnection()
 
-    // Método para mostrar los ejemplares disponibles
-    public function listarEjemplares() {
-        // Verificar si la sesión está iniciada
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();  // Iniciar la sesión si no está activa
+            // Consulta según el rol
+            if ($rol === 'bibliotecario') {
+                // Obtener todos los ejemplares (sin filtrado de estado)
+                $stmt = $pdo->prepare("SELECT ejemplares.*, libros.titulo 
+                                         FROM ejemplares 
+                                         INNER JOIN libros ON ejemplares.libro_id = libros.id");
+            } else {
+                // Si es lector, solo mostrar ejemplares disponibles
+                $stmt = $pdo->prepare("SELECT ejemplares.*, libros.titulo 
+                                         FROM ejemplares 
+                                         INNER JOIN libros ON ejemplares.libro_id = libros.id 
+                                         WHERE ejemplares.descripcion_estado = 'disponible'");
+            }
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener los resultados
+            $ejemplares = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Verifica si no hay ejemplares disponibles
+            if (empty($ejemplares)) {
+                $mensaje = "No hay ejemplares disponibles.";
+            } else {
+                $mensaje = null;
+            }
+
+            // Pasar los ejemplares y el mensaje a la vista
+            include __DIR__ . '/../views/AñadirPrestamo.php'; // Incluye la vista
+
+        } catch (PDOException $e) {
+            echo "Error en la consulta: " . $e->getMessage();
         }
-
-        // Obtener el rol del usuario (asumimos que está en la sesión o puedes modificarlo según tu lógica)
-        $rol = isset($_SESSION['usuario']['rol']) ? $_SESSION['usuario']['rol'] : 'lector';
-
-        // Crear la conexión a la base de datos
-        $pdo = DataBase::getConnection();  // Asegúrate de que DataBase::getConnection() devuelve el objeto PDO correctamente
-
-        // Obtener los ejemplares dependiendo del rol (lector o bibliotecario)
-        $ejemplares = Ejemplar::obtenerEjemplaresPorRol($pdo, $rol);
-
-        // Incluir la vista donde se mostrarán los ejemplares
-        include 'views/AñadirPrestamo.php'; 
     }
 }
 ?>

@@ -15,7 +15,7 @@ $pdo = Database::getConnection();
 $authController = new AuthController($pdo);
 $libroController = new LibroController();  // Crear una instancia de LibroController
 $prestamoController = new PrestamoController($pdo);  // Pasamos $pdo al constructor de PrestamoController
-$ejemplarController = new EjemplarController();  // Crear una instancia de EjemplarController
+$ejemplarController = new EjemplarController($pdo);   // Crear una instancia de EjemplarController
 // Verificar qué acción se solicita
 $action = isset($_GET['action']) ? $_GET['action'] : 'login'; // Si no se pasa acción, se asume 'login'
 
@@ -64,7 +64,7 @@ switch ($action) {
         $prestamoController->deletePrestamoAction();// Acción para eliminar un préstamo
         break;
     case 'ejemplares':
-        $ejemplarController->listarEjemplares($pdo, 'bibliotecario'); // Acción para listar ejemplares (puedes ajustar el rol si es necesario)
+        $ejemplarController->listarEjemplares($pdo, 'bibliotecario'); // Acción para listar ejemplares
         break;
     case 'usuarios':
         $authController->usuariosAction();// Acción para usuarios (solo bibliotecarios)

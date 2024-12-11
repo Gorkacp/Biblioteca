@@ -26,8 +26,8 @@
         <button type="submit">Agregar Préstamo</button>
     </form>
     
-<h2>Ejemplares Disponibles</h2>
-<?php if (isset($ejemplares) && !empty($ejemplares)): ?>
+    <h1>Ejemplares Disponibles</h1>
+<?php if (!empty($ejemplares)): ?>
     <table>
         <thead>
             <tr>
@@ -35,7 +35,6 @@
                 <th>Título</th>
                 <th>Código</th>
                 <th>Estado</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -45,9 +44,6 @@
                     <td><?php echo htmlspecialchars($ejemplar['titulo']); ?></td>
                     <td><?php echo htmlspecialchars($ejemplar['codigo']); ?></td>
                     <td><?php echo htmlspecialchars($ejemplar['descripcion_estado']); ?></td>
-                    <td>
-                        <a href="index.php?action=addPrestamo&ejemplar_id=<?php echo $ejemplar['id']; ?>" class="btn">Seleccionar</a>
-                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -55,5 +51,6 @@
 <?php else: ?>
     <p>No hay ejemplares disponibles.</p>
 <?php endif; ?>
+
 </body>
 </html>
